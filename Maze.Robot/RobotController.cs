@@ -10,6 +10,10 @@ namespace Maze.Solver
     public class RobotController
     {
         private IRobot robot;
+
+        // Tip: Why `protected` members? Use `protected` only if members are designed to be
+        //      used by derived classes. Was this your intention here? If not, prefer `private`.
+
         // why hashset?
         // https://stackoverflow.com/questions/4558754/define-what-is-a-hashset 
         // -> says it is quick and good for searching 
@@ -37,6 +41,10 @@ namespace Maze.Solver
         /// </remarks>
         public void MoveRobotToExit()
         {
+            // Tip: Consider not using the `System.Drawing.Point` struct here. It
+            //      has been designed for a different purpose (drawing). You just need
+            //      a container for two coordinates. Consider using e.g. a C# 7 tuple instead.
+
             // Here you have to add your code
             Point initpoint = new Point(0, 0);  // Why Point? -> x,y
             visited = new HashSet<Point>();
@@ -44,10 +52,17 @@ namespace Maze.Solver
             robot.ReachedExit += (_, __) => end = true;
             // solve maze
             recursiveVisitField(initpoint);
+
+            // General tip: Consider writing `if (!end)...` instead of `if (end == false)...`
+
             // he returned without solution
             // our robot trapped :(
             if (end == false)
                 robot.HaltAndCatchFire(); 
+
+            // General tip: Don't check in dead code. If you really want to check in 
+            //              large pieces of commented code, add a comment with the specific
+            //              reason in front of the comment section. Generally, avoid it.
 
             // not very glorious code
             //while (!reachedEnd)
@@ -91,6 +106,10 @@ namespace Maze.Solver
             //    robot.Move(Direction.Right);
             //}
         }
+
+        // Tip: Avoid `public` members that are not used outside of your class.
+        //      Prefer `private` in such cases.
+
         /// <summary>
         /// checks for exit
         /// </summary>
@@ -105,6 +124,9 @@ namespace Maze.Solver
                 // he can move left
                 if (robot.TryMove(Direction.Left) == true)
                 {
+                    // Tip: Don't write the same type on the left and the right side of the assignment.
+                    //      Prefer `var` in such cases.
+
                     // check point left
                     Point newtestpoint = new Point(testpoint.X - 1, testpoint.Y);
                     // try another point 
